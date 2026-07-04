@@ -19,6 +19,17 @@ const StatisticsLine = ({text, value}) => <p>{text}: {value}</p>
 const Statistics = ({ good, neutral, bad }) => {
   const all = good + neutral + bad
   const positive = (all == 0) ? '0%' : ((good / all) * 100) + '%'
+  
+  // If no feedback, give graceful message  
+  if (all == 0) {
+    return (
+      <div>
+      <h2>Statistics</h2>
+      <p>No feedback given</p>
+    </div>
+    )
+  }
+  
   return (
     <div>
       <h2>Statistics</h2>
