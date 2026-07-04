@@ -14,31 +14,40 @@ const Feedback = ({ onClickGood, onClickNeutral, onClickBad }) => {
   )
 }
 
-const StatisticsLine = ({text, value}) => <p>{text}: {value}</p> 
+const StatisticsLine = ({ text, value }) => (
+  <tr>
+    <td>{text}</td>
+    <td>{value}</td>
+  </tr>
+)
 
 const Statistics = ({ good, neutral, bad }) => {
   const all = good + neutral + bad
   const positive = (all == 0) ? '0%' : ((good / all) * 100) + '%'
-  
+
   // If no feedback, give graceful message  
   if (all == 0) {
     return (
       <div>
-      <h2>Statistics</h2>
-      <p>No feedback given</p>
-    </div>
+        <h2>Statistics</h2>
+        <p>No feedback given</p>
+      </div>
     )
   }
-  
+
   return (
     <div>
       <h2>Statistics</h2>
-      <StatisticsLine text='Good' value={good} />  
-      <StatisticsLine text='Neutral' value={neutral} /> 
-      <StatisticsLine text='Bad' value={bad} /> 
-      <StatisticsLine text='All' value={all} /> 
-      <StatisticsLine text='Average' value={(good-bad) / all} /> 
-      <StatisticsLine text='Positive' value={positive} />
+      <table border="1">
+        <tbody>
+          <StatisticsLine text='Good' value={good} />
+          <StatisticsLine text='Neutral' value={neutral} />
+          <StatisticsLine text='Bad' value={bad} />
+          <StatisticsLine text='All' value={all} />
+          <StatisticsLine text='Average' value={(good - bad) / all} />
+          <StatisticsLine text='Positive' value={positive} />
+        </tbody>
+      </table>
     </div>
   )
 }
