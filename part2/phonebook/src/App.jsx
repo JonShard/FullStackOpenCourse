@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import axios from 'axios'
 
 const Person = ({ person }) => <>{person.name} - {person.number}<br /></>
 
@@ -60,27 +61,20 @@ const Numbers = ({ persons }) => {
 
 
 const App = () => {
-  const [persons, setPersons] = useState([
-    {
-      id: 0,
-      name: 'Arto Hellas',
-      number: '12345678'
-    },
-    {
-      id: 1,
-      name: 'Ada lovalace',
-      number: '12345678'
-    },
-    {
-      id: 2,
-      name: 'Sam Doufus',
-      number: '55345128'
-    }
-  ])
+
+
+  const [persons, setPersons] = useState([])
 
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [search, setSearch] = useState('')
+
+
+  useEffect(() => {
+    axios.get('http://localhost:3001/persons').then(response => {
+      setPersons(response.data)
+    })
+  }, [])
 
   return (
     <div>
