@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 
+import personsService from './services/persons'
+
 const Person = ({ person }) => <>{person.name} - {person.number}<br /></>
 
 const SearchFilter = ({ search, setSearch }) => {
@@ -22,11 +24,16 @@ const SubmissionForm = ({ newName, setNewName, newNumber, setNewNumber, persons,
     }
 
     const person = {
-      id: persons.length,
       name: newName,
       number: newNumber
     }
-    setPersons(persons.concat(person))
+
+    personsService.create(person)
+    .then(updatedPerson => {
+       setPersons(persons.concat(updatedPerson))
+    })
+    .catch(error => alert("Unable to add phonebook entry"))
+
     setNewName('')
     setNewNumber('')
   }
@@ -61,21 +68,21 @@ const Numbers = ({ persons }) => {
 
 
 const App = () => {
-
-
   const [persons, setPersons] = useState([])
 
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [search, setSearch] = useState('')
 
-
   useEffect(() => {
-    axios.get('http://localhost:3001/persons').then(response => {
-      setPersons(response.data)
-    })
+    personsService
+      .getAll()
+      .then(initialPersons => setPersons(initialPersons), [])
+      .catch(error => alert("Unable to get phonebook entries from the server"))
   }, [])
 
+
+  console.log(`Rendering ${persons.length} phonebook entries`)
   return (
     <div>
       <h2>Phonebook</h2>
