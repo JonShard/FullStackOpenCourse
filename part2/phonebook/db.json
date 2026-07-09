@@ -26,16 +26,6 @@
       "id": "4ANComycqKs"
     },
     {
-      "name": "John Smith",
-      "number": "88855575557",
-      "id": "r6sNxOSO50o"
-    },
-    {
-      "name": "sdfgdh",
-      "number": "124312421",
-      "id": "SjRc-20pt_U"
-    },
-    {
       "name": "fghhfgh",
       "number": "4445454",
       "id": "WS6AmjQLSVw"
@@ -59,11 +49,6 @@
       "name": "sdfsdfsd",
       "number": "44324334",
       "id": "K4jlCFO5BKQ"
-    },
-    {
-      "name": "asdsadad",
-      "number": "234443",
-      "id": "qLiKClvUc3o"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

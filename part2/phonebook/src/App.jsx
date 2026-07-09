@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react'
 import axios from 'axios'
 
 import Notification from './Notification'
+import ErrorNotification from './ErrorNotification'
+
 import personsService from './services/persons'
 
 const Person = ({ person, persons, setPersons }) => {
@@ -26,15 +28,10 @@ const SearchFilter = ({ search, setSearch }) => {
 }
 
 
-const SubmissionForm = ({ newName, setNewName, newNumber, setNewNumber, persons, setPersons, notificationMessage, setNotificationMessage }) => {
+const SubmissionForm = ({ newName, setNewName, newNumber, setNewNumber, persons, setPersons, notificationMessage, setNotificationMessage, errorMessage, setErrorMessage }) => {
   const onNameChange = (event) => setNewName(event.target.value)
   const onNumberChange = (event) => setNewNumber(event.target.value)
 
-  const updatePerson = (personToUpdate) => {
-    personsService.update(personToUpdate.id, personToUpdate)
-      .then()
-      .catch(error => alert('Failed to update person'))
-  }
 
   const submitPerson = () => {
     event.preventDefault()
@@ -52,10 +49,23 @@ const SubmissionForm = ({ newName, setNewName, newNumber, setNewNumber, persons,
         `'${newName}' is already added to phonebook with number '${personFromServer.number}'.\n` +
         `Would you like to update their number to '${newNumber}'?`
       )) {
+        // Updaring the entry
         personFromServer.number = newNumber
-        updatePerson(personFromServer)
+        personsService.update(personFromServer.id, personFromServer)
+          .then()
+          .catch(error => {
+            console.log('Failed to update person: ', error)
+            setErrorMessage(`Information on '${personFromServer.name}' has already been deleted`)
+            setTimeout(() => {
+              console.log('clear error message')
+              setErrorMessage(null)
+            }, 5000)
+
+            setPersons(persons.filter(p => p.id !== personFromServer.id))
+          })
       }
     } else {
+      // Create new entry
       personsService.create(person)
         .then(updatedPerson => {
           setPersons(persons.concat(updatedPerson))
@@ -72,7 +82,7 @@ const SubmissionForm = ({ newName, setNewName, newNumber, setNewNumber, persons,
         .catch(error => {
           console.log(error)
           alert("Unable to add phonebook entry")
-        
+
         }
         )
     }
@@ -83,7 +93,8 @@ const SubmissionForm = ({ newName, setNewName, newNumber, setNewNumber, persons,
   return (
     <div>
       <h2>Submissions</h2>
-      <Notification message={notificationMessage}/>
+      <Notification message={notificationMessage} />
+      <ErrorNotification message={errorMessage} />
       <form>
         <div>
           name: <input onChange={onNameChange} value={newName} />
@@ -125,6 +136,7 @@ const App = () => {
   const [search, setSearch] = useState('')
 
   const [notificationMessage, setNotificationMessage] = useState(null)
+  const [errorMessage, setErrorMessage] = useState(null)
 
 
   useEffect(() => {
@@ -150,6 +162,8 @@ const App = () => {
         setPersons={setPersons}
         notificationMessage={notificationMessage}
         setNotificationMessage={setNotificationMessage}
+        errorMessage={errorMessage}
+        setErrorMessage={setErrorMessage}
       />
 
       <Numbers

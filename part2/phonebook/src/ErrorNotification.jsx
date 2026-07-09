@@ -1,8 +1,8 @@
 
-const Notification = ({ message }) => {
+const ErrorNotification = ({ message }) => {
     const style = {
-        color:'rgb(26, 122, 47)',
-        background: 'rgb(158, 190, 158)',
+        color:'rgb(156, 31, 31)',
+        background: 'rgb(185, 159, 159)',
         fontSize: 30,
         borderStyle: 'solid',
         borderRadius: 5,
@@ -21,4 +21,4 @@ const Notification = ({ message }) => {
     )
 }
 
-export default Notification
+export default ErrorNotification
