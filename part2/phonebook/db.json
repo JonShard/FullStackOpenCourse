@@ -29,6 +29,41 @@
       "name": "John Smith",
       "number": "88855575557",
       "id": "r6sNxOSO50o"
+    },
+    {
+      "name": "sdfgdh",
+      "number": "124312421",
+      "id": "SjRc-20pt_U"
+    },
+    {
+      "name": "fghhfgh",
+      "number": "4445454",
+      "id": "WS6AmjQLSVw"
+    },
+    {
+      "name": "asdfghh",
+      "number": "324535",
+      "id": "w9rejWhatuU"
+    },
+    {
+      "name": "sadffgh",
+      "number": "2345235345",
+      "id": "79GPhF20KbQ"
+    },
+    {
+      "name": "asdasdas",
+      "number": "234422",
+      "id": "TwgQOeBwCSE"
+    },
+    {
+      "name": "sdfsdfsd",
+      "number": "44324334",
+      "id": "K4jlCFO5BKQ"
+    },
+    {
+      "name": "asdsadad",
+      "number": "234443",
+      "id": "qLiKClvUc3o"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

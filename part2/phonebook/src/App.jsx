@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 
+import Notification from './Notification'
 import personsService from './services/persons'
 
 const Person = ({ person, persons, setPersons }) => {
@@ -25,7 +26,7 @@ const SearchFilter = ({ search, setSearch }) => {
 }
 
 
-const SubmissionForm = ({ newName, setNewName, newNumber, setNewNumber, persons, setPersons }) => {
+const SubmissionForm = ({ newName, setNewName, newNumber, setNewNumber, persons, setPersons, notificationMessage, setNotificationMessage }) => {
   const onNameChange = (event) => setNewName(event.target.value)
   const onNumberChange = (event) => setNewNumber(event.target.value)
 
@@ -58,8 +59,22 @@ const SubmissionForm = ({ newName, setNewName, newNumber, setNewNumber, persons,
       personsService.create(person)
         .then(updatedPerson => {
           setPersons(persons.concat(updatedPerson))
+
+          console.log('setNotificationMessage')
+          setNotificationMessage(`Added ${person.name}`)
+
+          setTimeout(() => {
+            console.log('cleared message')
+            setNotificationMessage(null)
+          }, 5000)
+
         })
-        .catch(error => alert("Unable to add phonebook entry"))
+        .catch(error => {
+          console.log(error)
+          alert("Unable to add phonebook entry")
+        
+        }
+        )
     }
     setNewName('')
     setNewNumber('')
@@ -68,6 +83,7 @@ const SubmissionForm = ({ newName, setNewName, newNumber, setNewNumber, persons,
   return (
     <div>
       <h2>Submissions</h2>
+      <Notification message={notificationMessage}/>
       <form>
         <div>
           name: <input onChange={onNameChange} value={newName} />
@@ -108,6 +124,9 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [search, setSearch] = useState('')
 
+  const [notificationMessage, setNotificationMessage] = useState(null)
+
+
   useEffect(() => {
     personsService
       .getAll()
@@ -129,6 +148,8 @@ const App = () => {
         setNewNumber={setNewNumber}
         persons={persons}
         setPersons={setPersons}
+        notificationMessage={notificationMessage}
+        setNotificationMessage={setNotificationMessage}
       />
 
       <Numbers
