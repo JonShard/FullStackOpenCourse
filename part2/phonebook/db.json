@@ -29,11 +29,6 @@
       "name": "John Smith",
       "number": "8882228882",
       "id": "r6sNxOSO50o"
-    },
-    {
-      "name": "Jane Doe",
-      "number": "21232313111",
-      "id": "_LTGjegRi-I"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

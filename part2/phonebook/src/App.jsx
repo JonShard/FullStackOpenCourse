@@ -3,7 +3,21 @@ import axios from 'axios'
 
 import personsService from './services/persons'
 
-const Person = ({ person }) => <>{person.name} - {person.number}<br /></>
+const Person = ({ person, persons, setPersons }) => {
+  const onDelete = () => {
+    if (!confirm(`Are you sure you want to delete ${person.name}`))
+      return
+    
+    personsService
+      .remove(person.id)
+      .then(deletedPerson => {
+        console.log(`Deleted person ${deletedPerson.name} with ID:${deletedPerson.id}`)
+        setPersons(persons.filter(p => p.id !== deletedPerson.id))
+      })
+      .catch(error => alert("Deletion failed"))
+  }
+  return <div>{person.name} - {person.number} <button onClick={onDelete}>delete</button></div>
+}
 
 const SearchFilter = ({ search, setSearch }) => {
   const onSearchChange = (event) => setSearch(event.target.value)
@@ -29,10 +43,10 @@ const SubmissionForm = ({ newName, setNewName, newNumber, setNewNumber, persons,
     }
 
     personsService.create(person)
-    .then(updatedPerson => {
-       setPersons(persons.concat(updatedPerson))
-    })
-    .catch(error => alert("Unable to add phonebook entry"))
+      .then(updatedPerson => {
+        setPersons(persons.concat(updatedPerson))
+      })
+      .catch(error => alert("Unable to add phonebook entry"))
 
     setNewName('')
     setNewNumber('')
@@ -57,19 +71,26 @@ const SubmissionForm = ({ newName, setNewName, newNumber, setNewNumber, persons,
 }
 
 
-const Numbers = ({ persons }) => {
+const Numbers = ({ persons, setPersons }) => {
   return (
     <div>
       <h2>Numbers</h2>
-      {persons.map(person => <Person key={person.id} person={person} />)}
+      {persons.map(person => <Person
+        key={person.id}
+        person={person}
+        persons={persons}
+        setPersons={setPersons}
+      />)}
     </div>
   )
 }
 
 
 const App = () => {
+  // Phonebook entries
   const [persons, setPersons] = useState([])
 
+  // Text input field values
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [search, setSearch] = useState('')
@@ -97,7 +118,10 @@ const App = () => {
         setPersons={setPersons}
       />
 
-      <Numbers persons={search.length == '' ? persons : persons.filter(p => p.name.toLowerCase().includes(search.toLowerCase()))} />
+      <Numbers
+        persons={search.length == '' ? persons : persons.filter(p => p.name.toLowerCase().includes(search.toLowerCase()))}
+        setPersons={setPersons}
+      />
     </div>
   )
 }

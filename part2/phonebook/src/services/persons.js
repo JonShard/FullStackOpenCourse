@@ -8,8 +8,8 @@ const baseUrl = 'http://localhost:3001/persons'
  * * @returns {Promise<Object[]>} A promise that resolves to an array of objects from the server.
  */
 const getAll = () => {
-  const request = axios.get(baseUrl)
-  return request.then(response => response.data)
+    const request = axios.get(baseUrl)
+    return request.then(response => response.data)
 }
 
 /**
@@ -19,8 +19,8 @@ const getAll = () => {
  * @returns {Promise<Object>} A promise that resolves to the saved object data from the server.
  */
 const create = newObject => {
-  const request = axios.post(baseUrl, newObject)
-  return request.then(response => response.data)
+    const request = axios.post(baseUrl, newObject)
+    return request.then(response => response.data)
 }
 
 /**
@@ -30,8 +30,19 @@ const create = newObject => {
  * @returns {Promise<Object>} A promise that resolves to the newly updated object data from the server.
  */
 const update = (id, newObject) => {
-  const request = axios.put(`${baseUrl}/${id}`, newObject)
-  return request.then(response => response.data)
+    const request = axios.put(`${baseUrl}/${id}`, newObject)
+    return request.then(response => response.data)
 }
 
-export default { getAll, create, update }
+
+/**
+ * Deletes a specific object from the server by its ID.
+ * * @param {string|number} id - The unique identifier of the object to remove.
+ * @returns {Promise<Object>} A promise that resolves to the deleted object.
+ */
+const remove = (id) => {
+    const request = axios.delete(`${baseUrl}/${id}`)
+    return request.then(response => response.data)
+}
+
+export default { getAll, create, update, remove }
