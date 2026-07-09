@@ -7,11 +7,11 @@ const Person = ({ person, persons, setPersons }) => {
   const onDelete = () => {
     if (!confirm(`Are you sure you want to delete ${person.name}`))
       return
-    
+
     personsService
       .remove(person.id)
       .then(deletedPerson => {
-        console.log(`Deleted person ${deletedPerson.name} with ID:${deletedPerson.id}`)
+        console.log(`Deleted person '${deletedPerson.name}' with ID: '${deletedPerson.id}'`)
         setPersons(persons.filter(p => p.id !== deletedPerson.id))
       })
       .catch(error => alert("Deletion failed"))
@@ -29,25 +29,38 @@ const SubmissionForm = ({ newName, setNewName, newNumber, setNewNumber, persons,
   const onNameChange = (event) => setNewName(event.target.value)
   const onNumberChange = (event) => setNewNumber(event.target.value)
 
+  const updatePerson = (personToUpdate) => {
+    personsService.update(personToUpdate.id, personToUpdate)
+      .then()
+      .catch(error => alert('Failed to update person'))
+  }
+
   const submitPerson = () => {
     event.preventDefault()
-
-    if (persons.some(p => p.name == newName)) {
-      alert(`'${newName}' is already added to phonebook`)
-      return
-    }
 
     const person = {
       name: newName,
       number: newNumber
     }
 
-    personsService.create(person)
-      .then(updatedPerson => {
-        setPersons(persons.concat(updatedPerson))
-      })
-      .catch(error => alert("Unable to add phonebook entry"))
+    // Update existing entry?
+    const personFromServer = persons.find(p => p.name == newName)
 
+    if (personFromServer) {
+      if (confirm(
+        `'${newName}' is already added to phonebook with number '${personFromServer.number}'.\n` +
+        `Would you like to update their number to '${newNumber}'?`
+      )) {
+        personFromServer.number = newNumber
+        updatePerson(personFromServer)
+      }
+    } else {
+      personsService.create(person)
+        .then(updatedPerson => {
+          setPersons(persons.concat(updatedPerson))
+        })
+        .catch(error => alert("Unable to add phonebook entry"))
+    }
     setNewName('')
     setNewNumber('')
   }
