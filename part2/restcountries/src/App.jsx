@@ -3,14 +3,18 @@ import axios from 'axios'
 
 import countryService from './services/countries'
 
-const SearchResult = ({ filtered }) => {
+const SearchResult = ({ filtered, setSearchValue }) => {
+  const onResultClick = (pickedCountry) => {
+    setSearchValue(pickedCountry)
+  }
+
   if (filtered.length == 0) return <p>No matches</p>
   if (filtered.length > 10) return <p>Too many matches, try making your search more specific.</p>
   if (filtered.length == 1) return // We're happy, nothing to do here
   return (
-    <ul>
-      {filtered.map(c => <li key={c.name.common}>{c.name.common}</li>)}
-    </ul>
+    <div>
+      {filtered.map(c => <div>{c.name.common} <button onClick={() => onResultClick(c.name.common)}>Show</button></div>)}
+    </div>
   )
 }
 
@@ -31,7 +35,7 @@ const Search = ({ countries, searchValue, setSearchValue, filtered, setFiltered 
     <div>
       Find countries
       <input onChange={onChange} value={searchValue} />
-      <SearchResult filtered={filtered} />
+      <SearchResult filtered={filtered} setSearchValue={setSearchValue} />
     </div>
   )
 }
