@@ -1,0 +1,28 @@
+html {
+  background-color: #15171a;
+}
+
+h1 {
+  color: rgb(212, 216, 230);
+}
+
+
+span {
+  color: rgb(212, 216, 230);
+  padding: 10px;
+}
+
+.note {
+  color: rgb(212, 216, 230);
+  padding-top: 3px;
+  font-size: 15px;
+}
+
+
+body {
+  width: 630px;
+  margin: 0 auto;
+  background-color: #2f363d;
+  padding: 0 20px 20px 20px;
+  border: 5px solid rgb(99, 118, 129);
+}

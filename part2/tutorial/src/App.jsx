@@ -1,16 +1,48 @@
 import { useState, useEffect } from 'react'
 
 import noteService from './services/notes'
+import './index.css'
+
+const Notification = ({ message }) => {
+  if (message === null) {
+    return null
+  }
+
+  return (
+    <div className="error">
+      {message}
+    </div>
+  )
+}
+
+
+const Footer = () => {
+  const footerStyle = {
+    color: 'green',
+    fontStyle: 'italic',
+    backgroundColor: 'black', 
+  }
+
+  return (
+    <div style={footerStyle}>
+      <br />
+      <p>
+        Note app, Department of Computer Science, University of Helsinki 2025
+      </p>
+    </div>
+  )
+}
+
 
 const Note = ({ note, toggleImportance }) => {
   const label = note.important
     ? 'make not important' : 'make important'
 
-  const style = { display: 'inline-block', width: '150px' }
+
   return (
-    <li>
-      <span style={style}><button onClick={toggleImportance}>{label}</button></span>
-      <span>{note.content}</span>
+    <li className="note">
+      <button onClick={toggleImportance}>{label}</button>
+      {note.content}
     </li>
   )
 }
@@ -19,6 +51,7 @@ const App = () => {
   const [notes, setNotes] = useState([])
   const [newNote, setNewNote] = useState('a new note...')
   const [showAll, setShowAll] = useState(true)
+  const [errorMessage, setErrorMessage] = useState(null)
 
   useEffect(() => {
     noteService
@@ -40,12 +73,15 @@ const App = () => {
         setNotes(notes.map(note => note.id === id ? updatedNote : note))
       })
       .catch(error => {
-        alert(
-          `the note '${note.content}' was already deleted from server`
+        setErrorMessage(
+          `Note '${note.content}' was already removed from server`
         )
-        setNotes(notes.filter(n => n.id !== id))
-      })
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000)
 
+      }
+      )
   }
 
 
@@ -75,6 +111,7 @@ const App = () => {
   return (
     <div>
       <h1>Notes</h1>
+      <Notification message={errorMessage} />
       <div>
         <button onClick={() => setShowAll(!showAll)}>
           show {showAll ? 'important' : 'all'}
@@ -94,6 +131,7 @@ const App = () => {
         />
         <button type="submit">save</button>
       </form>
+      <Footer />
     </div>
   )
 }
